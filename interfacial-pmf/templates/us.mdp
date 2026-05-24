@@ -1,0 +1,53 @@
+; us.mdp — Umbrella Sampling (50 windows, k=5000, 3ns each)
+; Template for interfacial PMF
+; Adapted from big_box_v2 project
+
+integrator          = md
+dt                  = 0.001
+nsteps              = 3000000
+nstxout-compressed  = 1000
+nstenergy           = 10000
+nstlog              = 10000
+continuation        = no               ; Fresh start per window
+constraint-algorithm = lincs
+constraints         = h-bonds
+lincs_iter          = 2                ; Increased from 1 (large systems)
+lincs_order         = 6                ; Increased from 4
+ns_type             = grid
+nstlist             = 30
+rcoulomb            = 1.0
+rvdw                = 1.0
+cutoff-scheme       = Verlet
+coulombtype         = PME
+pme_order           = 4
+fourierspacing      = 0.1
+tcoupl              = V-rescale
+tc-grps             = System
+tau-t               = 0.1
+ref-t               = 300
+pcoupl              = no
+DispCorr            = EnerPres
+gen_vel             = yes
+gen_temp            = 300
+gen_seed            = -1
+pbc                 = xyz
+freezedim           = Y Y N
+freeze_grps         = SOLUTE
+nstcomm             = 10
+comm-mode           = Linear-acceleration-correction
+comm-grps           = System
+
+; Pull (fixed umbrella)
+pull                = yes
+pull_ngroups        = 1
+pull_ncoords        = 1
+pull_group1_name    = SOLUTE
+pull_coord1_type    = umbrella
+pull_coord1_geometry = direction-periodic
+pull_coord1_groups  = 0 1
+pull_coord1_origin  = 0 0 10.0
+pull_coord1_dim     = N N Y
+pull_coord1_start   = yes
+pull_coord1_rate    = 0.000
+pull_coord1_k       = 5000
+pull_coord1_vec     = 0 0 1
